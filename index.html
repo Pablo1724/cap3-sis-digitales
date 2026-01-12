@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemas Digitales I - Capítulo 3: Álgebra de Boole</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .theorem-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+        .theorem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #6366f1;
+        }
+
+        .math-symbol {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .active-nav {
+            color: #4f46e5;
+            background: #f5f3ff;
+            border-right: 4px solid #4f46e5;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <!-- Sidebar Navigation -->
+    <aside class="fixed left-0 top-0 h-screen w-64 bg-white border-r hidden lg:flex flex-col z-50">
+        <div class="p-8 border-b">
+            <h1 class="text-xl font-extrabold text-indigo-600 flex items-center gap-2">
+                <i class="fas fa-square-root-variable"></i> DIGITAL-I
+            </h1>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Capítulo 3: Álgebra Booleana</p>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4 custom-scrollbar">
+            <div class="px-4 space-y-1">
+                <a href="#teoremas" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 font-semibold text-sm hover:bg-slate-50 transition-all">
+                    <i class="fas fa-book-open w-5"></i> 3.1 Teoremas
+                </a>
+                <a href="#funciones" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 font-semibold text-sm hover:bg-slate-50 transition-all">
+                    <i class="fas fa-function w-5"></i> 3.2 Funciones
+                </a>
+                <a href="#tablas" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 font-semibold text-sm hover:bg-slate-50 transition-all">
+                    <i class="fas fa-table w-5"></i> 3.3 Tablas de Verdad
+                </a>
+                <a href="#terminos" class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 font-semibold text-sm hover:bg-slate-50 transition-all">
+                    <i class="fas fa-list-ol w-5"></i> 3.4 Max/Minterminos
+                </a>
+            </div>
+            <div class="mt-8 px-8">
+                <div class="bg-indigo-50 p-4 rounded-xl">
+                    <p class="text-[10px] font-bold text-indigo-400 uppercase mb-2">Proyecto Final</p>
+                    <p class="text-xs text-indigo-700 font-medium">Usa estos teoremas para reducir compuertas físicas.</p>
+                </div>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 p-6 md:p-12">
+        
+        <!-- Header -->
+        <header class="max-w-4xl mb-16">
+            <div class="flex items-center gap-2 text-indigo-500 font-bold text-xs uppercase tracking-widest mb-4">
+                <i class="fas fa-microchip"></i> Ingeniería de Sistemas
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight">Álgebra de Boole</h1>
+            <p class="text-lg text-slate-500 leading-relaxed max-w-2xl">
+                Fundada por George Boole, esta matemática es el lenguaje del hardware. Permite simplificar circuitos complejos mediante leyes lógicas de suma y producto.
+            </p>
+        </header>
+
+        <!-- 3.1 Teoremas -->
+        <section id="teoremas" class="mb-24 scroll-mt-10">
+            <div class="flex items-center gap-4 mb-8">
+                <h2 class="text-2xl font-extrabold text-slate-800">3.1 Teoremas Fundamentales</h2>
+                <div class="h-px bg-slate-200 flex-grow"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Identidad -->
+                <div class="bg-white p-6 rounded-2xl theorem-card">
+                    <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-fingerprint"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Leyes de Identidad</h3>
+                    <div class="space-y-2 mono text-sm text-indigo-600">
+                        <p>A + 0 = A</p>
+                        <p>A · 1 = A</p>
+                    </div>
+                </div>
+                <!-- Nulidad -->
+                <div class="bg-white p-6 rounded-2xl theorem-card">
+                    <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Leyes de Nulidad</h3>
+                    <div class="space-y-2 mono text-sm text-amber-600">
+                        <p>A + 1 = 1</p>
+                        <p>A · 0 = 0</p>
+                    </div>
+                </div>
+                <!-- De Morgan -->
+                <div class="bg-indigo-600 p-6 rounded-2xl text-white shadow-lg lg:col-span-1">
+                    <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Leyes de De Morgan</h3>
+                    <div class="space-y-2 mono text-sm text-indigo-100">
+                        <p>(A + B)' = A' · B'</p>
+                        <p>(A · B)' = A' + B'</p>
+                    </div>
+                    <p class="text-[10px] mt-4 text-indigo-200">Esencial para transformar compuertas NAND en NOR y viceversa.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3.2 & 3.3 Funciones y Tablas Lab -->
+        <section id="funciones" class="mb-24 scroll-mt-10">
+            <div class="flex items-center gap-4 mb-8">
+                <h2 class="text-2xl font-extrabold text-slate-800">3.2 y 3.3 Laboratorio de Tablas de Verdad</h2>
+                <div class="h-px bg-slate-200 flex-grow"></div>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+                <div class="p-8 border-b bg-slate-50">
+                    <h3 class="font-bold text-lg mb-2">Generador de Tablas</h3>
+                    <p class="text-sm text-slate-500">Evalúa funciones del tipo <span class="math-symbol">f(A, B)</span>. Usa ' + ' para OR, ' * ' para AND y ' ! ' para NOT.</p>
+                </div>
+                <div class="p-8 lg:flex gap-12">
+                    <div class="lg:w-1/3 space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Selecciona Función</label>
+                            <select id="funcSelect" onchange="generateTable()" class="w-full p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-indigo-500 font-bold text-slate-700">
+                                <option value="A+B">A + B (OR)</option>
+                                <option value="A*B">A * B (AND)</option>
+                                <option value="!(A+B)">!(A + B) (NOR)</option>
+                                <option value="!(A*B)">!(A * B) (NAND)</option>
+                                <option value="(A*!B)+(!A*B)">A XOR B</option>
+                            </select>
+                        </div>
+                        <div class="p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
+                            <h4 class="text-xs font-bold text-indigo-600 uppercase mb-2">Análisis de Función</h4>
+                            <p id="funcExp" class="mono text-sm text-indigo-800">Q = A + B</p>
+                        </div>
+                    </div>
+
+                    <div class="lg:w-2/3 mt-8 lg:mt-0 overflow-x-auto">
+                        <table class="w-full text-center border-collapse">
+                            <thead>
+                                <tr class="bg-slate-900 text-white">
+                                    <th class="p-3 border border-slate-700 mono">A</th>
+                                    <th class="p-3 border border-slate-700 mono">B</th>
+                                    <th class="p-3 border border-slate-700 mono bg-indigo-600">Q (Salida)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="truthTableBody">
+                                <!-- Generado por JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3.4 Maxterminos y Minterminos -->
+        <section id="terminos" class="mb-24 scroll-mt-10">
+            <div class="flex items-center gap-4 mb-8">
+                <h2 class="text-2xl font-extrabold text-slate-800">3.4 Minterminos y Maxterminos</h2>
+                <div class="h-px bg-slate-200 flex-grow"></div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Minterminos -->
+                <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+                    <div class="relative z-10">
+                        <span class="text-indigo-600 font-black text-4xl mb-4 block">$\sum m$</span>
+                        <h3 class="text-xl font-bold mb-4">Suma de Productos (Minterminos)</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                            Se enfoca en las filas donde la salida es **1**. Cada variable se multiplica; si la entrada es 0 se niega, si es 1 se mantiene normal.
+                        </p>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200 mono text-xs">
+                            Ej: m1 (0,1) = A'B
+                        </div>
+                    </div>
+                    <i class="fas fa-plus absolute -bottom-4 -right-4 text-slate-50 text-8xl group-hover:text-indigo-50 transition-colors"></i>
+                </div>
+
+                <!-- Maxterminos -->
+                <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm relative overflow-hidden group">
+                    <div class="relative z-10">
+                        <span class="text-rose-600 font-black text-4xl mb-4 block">$\prod M$</span>
+                        <h3 class="text-xl font-bold mb-4">Producto de Sumas (Maxterminos)</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                            Se enfoca en las filas donde la salida es **0**. Cada variable se suma; si la entrada es 1 se niega, si es 0 se mantiene normal.
+                        </p>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-dashed border-slate-200 mono text-xs">
+                            Ej: M1 (0,1) = A+B'
+                        </div>
+                    </div>
+                    <i class="fas fa-times absolute -bottom-4 -right-4 text-slate-50 text-8xl group-hover:text-rose-50 transition-colors"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t pt-10 pb-20 text-center">
+            <div class="flex justify-center gap-6 mb-4">
+                <a href="#" class="text-slate-400 hover:text-indigo-600 transition-colors"><i class="fab fa-github text-xl"></i></a>
+                <a href="#" class="text-slate-400 hover:text-indigo-600 transition-colors"><i class="fas fa-microchip text-xl"></i></a>
+                <a href="#" class="text-slate-400 hover:text-indigo-600 transition-colors"><i class="fas fa-university text-xl"></i></a>
+            </div>
+            <p class="text-slate-400 text-sm">© 2026 Sistemas Digitales I - UPDS Bolivia</p>
+        </footer>
+
+    </main>
+
+    <script>
+        function generateTable() {
+            const select = document.getElementById('funcSelect');
+            const expText = document.getElementById('funcExp');
+            const tbody = document.getElementById('truthTableBody');
+            const expression = select.value;
+            
+            expText.innerText = `Q = ${select.options[select.selectedIndex].text.split('(')[0]}`;
+            tbody.innerHTML = '';
+
+            // Combinaciones para 2 variables (A, B)
+            const combinations = [
+                {a: 0, b: 0},
+                {a: 0, b: 1},
+                {a: 1, b: 0},
+                {a: 1, b: 1}
+            ];
+
+            combinations.forEach(combo => {
+                let q;
+                // Simulación de evaluación lógica
+                const A = !!combo.a;
+                const B = !!combo.b;
+
+                switch(expression) {
+                    case 'A+B': q = A || B; break;
+                    case 'A*B': q = A && B; break;
+                    case '!(A+B)': q = !(A || B); break;
+                    case '!(A*B)': q = !(A && B); break;
+                    case '(A*!B)+(!A*B)': q = (A && !B) || (!A && B); break;
+                    default: q = 0;
+                }
+
+                const res = q ? 1 : 0;
+                const row = `
+                    <tr class="hover:bg-indigo-50 transition-colors">
+                        <td class="p-3 border border-slate-200 mono font-bold">${combo.a}</td>
+                        <td class="p-3 border border-slate-200 mono font-bold">${combo.b}</td>
+                        <td class="p-3 border border-slate-200 mono font-black ${res ? 'text-indigo-600 bg-indigo-50/50' : 'text-slate-400'}">${res}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // Initialize active nav on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            let current = "";
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 120) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active-nav');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active-nav');
+                }
+            });
+        });
+
+        // Init
+        generateTable();
+    </script>
+</body>
+</html>
